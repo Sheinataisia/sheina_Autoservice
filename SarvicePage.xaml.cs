@@ -93,7 +93,7 @@ namespace sheina_Autoservice
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage(null));
+            Manager.MainFrame.Navigate(new AddEditPage(null)); 
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
