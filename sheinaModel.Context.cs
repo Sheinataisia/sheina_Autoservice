@@ -15,23 +15,19 @@ namespace sheina_Autoservice
     
     public partial class шеина_автосервисEntities : DbContext
     {
-        public шеина_автосервисEntities()
-            : base("name=шеина_автосервисEntities")
-        {
-        }
 
         private static шеина_автосервисEntities _context;
-         
         public static шеина_автосервисEntities GetContext()
         {
             if (_context == null)
                 _context = new шеина_автосервисEntities();
             return _context;
         }
-
-
-
-
+        public шеина_автосервисEntities()
+            : base("name=шеина_автосервисEntities")
+        {
+        }
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -46,6 +42,7 @@ namespace sheina_Autoservice
         public virtual DbSet<ProductPhoto> ProductPhoto { get; set; }
         public virtual DbSet<ProductSale> ProductSale { get; set; }
         public virtual DbSet<Service> Service { get; set; }
+
         public virtual DbSet<ServicePhoto> ServicePhoto { get; set; }
         public virtual DbSet<Tag> Tag { get; set; }
     }

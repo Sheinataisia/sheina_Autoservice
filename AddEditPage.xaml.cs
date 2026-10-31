@@ -37,7 +37,7 @@ namespace sheina_Autoservice
                 errors.AppendLine("Укажите стоимость услуги");
             if (_currentServise.Discount < 0 || _currentServise.Discount > 100)
                 errors.AppendLine("Укажите скидку");
-            if (string.IsNullOrWhiteSpace(_currentServise.DurationIn))
+            if (_currentServise.DurationIn == 0)
                 errors.AppendLine("Укажите длительность услуги");
             if(errors.Length > 0)
             {
