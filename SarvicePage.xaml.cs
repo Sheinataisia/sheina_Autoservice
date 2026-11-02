@@ -110,6 +110,7 @@ namespace sheina_Autoservice
                 шеина_автосервисEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
                 ServiceListView.ItemsSource = шеина_автосервисEntities.GetContext().Service.ToList();
             }
+            UpdateServices();
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -162,7 +163,7 @@ namespace sheina_Autoservice
                 {
                     CurrentPage = (int)selectedPage;
                     min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                    for (int i = CountPage * 10; i < min; i++)
+                    for (int i = CurrentPage * 10; i < min; i++)
                     {
                         CurrentPageList.Add(TableList[i]);
                     }

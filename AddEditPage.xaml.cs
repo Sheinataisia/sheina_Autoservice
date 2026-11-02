@@ -36,25 +36,36 @@ namespace sheina_Autoservice
             if (_currentServise.Cost == 0)
                 errors.AppendLine("Укажите стоимость услуги");
             if (_currentServise.Discount < 0 || _currentServise.Discount > 100)
-                errors.AppendLine("Укажите скидку");
+                errors.AppendLine("Укажите скидку от 0 до 100");
             if (_currentServise.DurationIn == 0)
                 errors.AppendLine("Укажите длительность услуги");
-            if(errors.Length > 0)
+            if (_currentServise.DurationIn > 240)
+                errors.AppendLine("Длительность не может быть больше 240 минут или меньше 0");
+            if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
             }
-            if (_currentServise.ID == 0)
-                шеина_автосервисEntities.GetContext().Service.Add(_currentServise);
-            try
+            var allServices = шеина_автосервисEntities.GetContext().Service.ToList();
+            allServices = allServices.Where(p => (p.ID != _currentServise.ID && p.Title == _currentServise.Title)).ToList();
+            if (allServices.Count == 0)
             {
-                шеина_автосервисEntities.GetContext().SaveChanges();
-                MessageBox.Show("информация сохранена");
-                Manager.MainFrame.GoBack();
+                if (_currentServise.ID == 0)
+                    шеина_автосервисEntities.GetContext().Service.Add(_currentServise);
+                try
+                {
+                    шеина_автосервисEntities.GetContext().SaveChanges();
+                    MessageBox.Show("информация сохранена");
+                    Manager.MainFrame.GoBack();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message.ToString());
+                MessageBox.Show("Уже существует такая услуга");
             }
         }
     }

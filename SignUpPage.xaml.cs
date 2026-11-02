@@ -41,7 +41,7 @@ namespace sheina_Autoservice
                 errors.AppendLine("Укажите дату услуги");
             if (TBStart.Text == "")
                 errors.AppendLine("Укажите время начала услуги");
-            if(errors.Length > 0)
+            if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
@@ -49,8 +49,59 @@ namespace sheina_Autoservice
             _currentClientService.ClientID = ComboClient.SelectedIndex + 1;
             _currentClientService.ServiceID = _currentService.ID;
             _currentClientService.StartTime = Convert.ToDateTime(StartDate.Text + " " + TBStart.Text);
-            if(_curre)
+            if (_currentClientService.ID == 0)
+                шеина_автосервисEntities.GetContext().ClientService.Add(_currentClientService);
+            try
+            {
+                шеина_автосервисEntities.GetContext().SaveChanges();
+                MessageBox.Show("информация сохранена");
+                Manager.MainFrame.GoBack();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
         }
 
+        private void TBStart_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string s = TBStart.Text;
+            if (s.Length <= 3 || !s.Contains(':'))
+                TBEnd.Text = "";
+            else
+            {
+                string[] start = s.Split(new char[] { ':' });
+                int startHour = Convert.ToInt32(start[0].ToString()) * 60;
+                int startMin = Convert.ToInt32(start[1].ToString());
+                int sum = startHour + startMin + _currentService.DurationIn;
+                if (startHour <= 1440 && startMin < 60)
+                {
+                    int EndHour = (sum / 60) % 24;
+                    int EndMin = sum % 60;
+                    s = EndHour.ToString("00") + ":" + EndMin.ToString("00");
+                    TBEnd.Text = s;
+                }
+                else
+                {
+                    MessageBox.Show("так нельзя","Внимание!");
+                    TBEnd.Text = "";
+                    TBStart.Text = "";
+                }
+            }
+        }
+
+        private void TBStart_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach(char c in e.Text)
+            {
+                if (char.IsDigit(c) || c == ':')
+                {
+
+                }
+                else
+                    e.Handled = true;
+                return;
+            }
+        }
     }
 }
